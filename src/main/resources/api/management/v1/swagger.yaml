@@ -1,0 +1,27 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "WasHeuteEssen Management API"
+schemes:
+  - "http"
+tags:
+  - name: recipies
+  - name: import
+paths:
+  /recipies/import:
+    post:
+      summary: "import recipes"
+      operationId: "startImport"
+      tags:
+        - import
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: file
+          in: formData
+          description: the file to import
+          required: true
+          type: file
+      responses:
+        202:
+          description: "file accepted"

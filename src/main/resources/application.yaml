@@ -1,0 +1,5 @@
+spring.batch.job.enabled: false
+
+spring.servlet.multipart:
+  maxFileSize: 200MB
+  maxRequestSize: 200MB
