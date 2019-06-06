@@ -1,5 +1,11 @@
-spring.batch.job.enabled: false
-
-spring.servlet.multipart:
-  maxFileSize: 200MB
-  maxRequestSize: 200MB
+spring:
+  jpa:
+    properties:
+      hibernate:
+        temp.use_jdbc_metadata_defaults: false
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
+    hibernate:
+      ddl-auto: none
+  servlet.multipart:
+    maxFileSize: 200MB
+    maxRequestSize: 200MB

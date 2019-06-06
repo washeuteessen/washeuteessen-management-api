@@ -18,6 +18,8 @@ public class ApiConfiguration extends WebSecurityConfigurerAdapter {
         super.configure(http);
 
         http
+                .headers().frameOptions().disable()
+                .and()
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests()

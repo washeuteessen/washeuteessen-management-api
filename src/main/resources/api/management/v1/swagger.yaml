@@ -5,10 +5,9 @@ info:
 schemes:
   - "http"
 tags:
-  - name: recipies
   - name: import
 paths:
-  /recipies/import:
+  /management/import:
     post:
       summary: "import recipes"
       operationId: "startImport"
