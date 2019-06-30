@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
+import de.washeuteessen.management.importjob.DuplicationFilter;
 import de.washeuteessen.management.importjob.Job;
 import de.washeuteessen.management.importjob.file.model.RecipeJsonNode;
 import de.washeuteessen.management.recipe.RecipeRepository;
@@ -17,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 @AllArgsConstructor
 public class FileJob extends Job {
@@ -44,10 +44,12 @@ public class FileJob extends Job {
                     JsonParser::close
             );
 
+            final DuplicationFilter duplicationFilter = new DuplicationFilter(recipeRepository);
             flowable.map(RecipeJsonNode::toRecipe)
-                    .buffer(1, TimeUnit.SECONDS)
+                    //.buffer(1, TimeUnit.SECONDS)
+                    .map(duplicationFilter::updateExisting)
                     .subscribe(
-                            recipeRepository::saveAll,
+                            recipeRepository::save,
                             error -> LOGGER.error("file import failed", error),
                             () -> LOGGER.info("file import done"));
         } catch (IOException e) {
