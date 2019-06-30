@@ -1,7 +1,6 @@
-package de.washeuteessen.management.importjob.model;
+package de.washeuteessen.management.importjob.file.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -19,10 +18,11 @@ public class IngridientsJsonNode {
         }
 
         this.ingredients = new ArrayList<>();
-        ((ArrayNode) ingridientsJsonNode).forEach(jsonNode -> {
-            this.ingredients.add(jsonNode.get("name").textValue());
-        });
+        /**((ArrayNode) ingridientsJsonNode).forEach(jsonNode -> {
+         this.ingredients.add(jsonNode.get("name").textValue());
+         });**/
 
+        this.ingredients.add(ingridientsJsonNode.asText(null));
     }
 
 }

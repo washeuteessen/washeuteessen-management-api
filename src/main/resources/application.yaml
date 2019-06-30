@@ -9,3 +9,7 @@ spring:
   servlet.multipart:
     maxFileSize: 200MB
     maxRequestSize: 200MB
+
+  data:
+    mongodb:
+      database: recipes

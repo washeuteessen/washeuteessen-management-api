@@ -2,6 +2,7 @@ package de.washeuteessen.management.api.management.v1;
 
 import de.washeuteessen.management.api.swagger.v1.ImportApiDelegate;
 import de.washeuteessen.management.importjob.ImportService;
+import de.washeuteessen.management.importjob.file.FileJob;
 import lombok.AllArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ImportApiDelegateImpl implements ImportApiDelegate {
 
         try {
             final File tempFile = this.createTempFile(file.getInputStream());
-            this.importService.run(tempFile);
+            this.importService.run(new FileJob(tempFile));
         } catch (IOException e) {
             e.printStackTrace();
         }

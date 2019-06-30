@@ -1,13 +1,15 @@
+server:
+  port: 8081
 spring:
-  jpa:
-    properties:
-      hibernate:
-        temp.use_jdbc_metadata_defaults: true
-        dialect: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create
   datasource:
-    url: jdbc:h2:file:./index/database;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:postgresql://docker.local:5432/washeuteessen
+    password: password
+    username: postgres
 
-  h2.console.enabled: true
-  h2.console.path: /h2-console
+  data:
+    mongodb:
+      uri: mongodb://docker.local:27017
+
+washeuteessen.management:
+  # every hour
+  mongoImportCron: 0 0 * * * *

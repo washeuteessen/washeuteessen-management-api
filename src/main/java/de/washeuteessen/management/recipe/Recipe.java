@@ -23,6 +23,7 @@ public class Recipe {
 
     private String url;
     private String imageSrc;
+    private String source;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
@@ -32,4 +33,14 @@ public class Recipe {
     @Column(name = "INGREDIENT")
     private List<String> ingredients;
 
+    public Recipe updateWith(Recipe recipe) {
+        this.title = recipe.getTitle();
+        this.imageSrc = recipe.getImageSrc();
+        this.url = recipe.getUrl();
+        this.imageSrc = recipe.getImageSrc();
+        this.source = recipe.getSource();
+        this.ingredients.clear();
+        this.ingredients.addAll(recipe.getIngredients());
+        return this;
+    }
 }
