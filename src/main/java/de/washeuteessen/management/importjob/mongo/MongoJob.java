@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 @AllArgsConstructor
 public class MongoJob extends Job {
@@ -20,12 +22,27 @@ public class MongoJob extends Job {
     public void runAndSaveTo(final RecipeRepository recipeRepository) {
 
         final DuplicationFilter duplicationFilter = new DuplicationFilter(recipeRepository);
-        this.repository.findAll(RecipeMongoSource.class).stream()
+
+        final Query query = new Query();
+        query.addCriteria(Criteria.where("imported").exists(false));
+        query.limit(100);
+
+        this.repository.find(query, RecipeMongoSource.class).stream()
+                .map(this::markAsImported)
+                .filter(RecipeMongoSource::isValid)
                 .map(RecipeMongoSource::toRecipe)
                 .map(duplicationFilter::updateExisting)
                 .forEach(recipeRepository::save);
 
         LOGGER.info("mongo import done");
+    }
+
+    private RecipeMongoSource markAsImported(final RecipeMongoSource recipeMongoSource) {
+
+        recipeMongoSource.setImported(true);
+        this.repository.save(recipeMongoSource);
+
+        return recipeMongoSource;
     }
 
 

@@ -19,6 +19,8 @@ public class RecipeMongoSource {
     private String url;
     private String text;
 
+    private boolean imported;
+
     public Recipe toRecipe() {
         return Recipe.builder()
                 .title(this.title)
@@ -28,4 +30,16 @@ public class RecipeMongoSource {
                 .url(this.url)
                 .build();
     }
+
+    public boolean isValid() {
+        if (null == title) {
+            return false;
+        } else if (null == img_src) {
+            return false;
+        } else if (null == url) {
+            return false;
+        }
+        return true;
+    }
+
 }
