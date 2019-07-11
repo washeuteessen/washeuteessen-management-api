@@ -13,3 +13,16 @@ spring:
   data:
     mongodb:
       database: recipes
+
+management.endpoint:
+  metrics.enabled: true
+  prometheus.enabled: true
+management.metrics.export.prometheus.enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health
+  endpoint:
+    health:
+      show-details: always

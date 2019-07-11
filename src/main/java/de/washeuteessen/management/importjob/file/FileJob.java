@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.MappingJsonFactory;
 import de.washeuteessen.management.importjob.DuplicationFilter;
 import de.washeuteessen.management.importjob.Job;
 import de.washeuteessen.management.importjob.file.model.RecipeJsonNode;
+import de.washeuteessen.management.importjob.metrics.ImportMetrics;
 import de.washeuteessen.management.recipe.RecipeRepository;
 import io.reactivex.Emitter;
 import io.reactivex.Flowable;
@@ -27,7 +28,7 @@ public class FileJob extends Job {
     private File file;
 
     @Override
-    public void runAndSaveTo(final RecipeRepository recipeRepository) {
+    public void runAndSaveTo(final RecipeRepository recipeRepository, final ImportMetrics importMetrics) {
         try {
 
             final JsonFactory f = new MappingJsonFactory();
@@ -44,7 +45,7 @@ public class FileJob extends Job {
                     JsonParser::close
             );
 
-            final DuplicationFilter duplicationFilter = new DuplicationFilter(recipeRepository);
+            final DuplicationFilter duplicationFilter = new DuplicationFilter(recipeRepository, importMetrics);
             flowable.map(RecipeJsonNode::toRecipe)
                     //.buffer(1, TimeUnit.SECONDS)
                     .map(duplicationFilter::updateExisting)
