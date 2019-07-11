@@ -1,9 +1,0 @@
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: {{ print .Values.name "-config" }}
-  namespace: {{ .Values.namespace }}
-data:
-  spring.datasource.username: {{ .Values.db_user }}
-  spring.datasource.password: {{ .Values.db_password }}
-  spring.datasource.url: jdbc:postgresql://postgres:5432/washeuteessen
