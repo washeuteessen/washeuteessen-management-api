@@ -1,15 +1,15 @@
 package de.washeuteessen.management.configuration;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.reactivestreams.client.MongoClient;
+import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
 @Configuration
-@EnableMongoRepositories({"de.washeuteessen.management.importjob.mongo.repository"})
-public class MongoConfiguration extends AbstractMongoConfiguration {
+@EnableReactiveMongoRepositories({"de.washeuteessen.management.source"})
+public class MongoConfiguration extends AbstractReactiveMongoConfiguration {
 
     private String mongoDbUri;
     private String database;
@@ -27,8 +27,7 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
     }
 
     @Override
-    public MongoClient mongoClient() {
-        return new MongoClient(new MongoClientURI(this.mongoDbUri));
+    public MongoClient reactiveMongoClient() {
+        return MongoClients.create(this.mongoDbUri);
     }
-
 }

@@ -1,9 +1,8 @@
-package de.washeuteessen.management.importjob.mongo;
+package de.washeuteessen.management.importjob;
 
-import de.washeuteessen.management.importjob.ImportService;
-import de.washeuteessen.management.importjob.Job;
+import de.washeuteessen.management.importjob.mongo.MongoJob;
+import de.washeuteessen.management.source.RecipeMongoSourceRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +10,13 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class MongoImportTimer {
 
-    private MongoOperations mongoOperations;
+    private RecipeMongoSourceRepository recipeMongoSourceRepository;
     private ImportService importService;
 
     @Scheduled(cron = "${washeuteessen.management.mongoImportCron}")
     public void runDbJob() {
 
-        final Job job = new MongoJob(this.mongoOperations);
+        final Job job = new MongoJob(this.recipeMongoSourceRepository);
 
         this.importService.run(job);
     }

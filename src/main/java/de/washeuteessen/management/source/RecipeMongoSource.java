@@ -1,4 +1,4 @@
-package de.washeuteessen.management.importjob.mongo.repository;
+package de.washeuteessen.management.source;
 
 import de.washeuteessen.management.recipe.Recipe;
 import lombok.Data;

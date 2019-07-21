@@ -10,6 +10,16 @@ spring:
     mongodb:
       uri: mongodb://docker.local:27017
 
-washeuteessen.management:
+washeuteessen:
   # every hour
-  mongoImportCron: 0 0 * * * *
+  management.mongoImportCron: 0 0 * * * *
+  # sitemap stuff
+  sitemap:
+    enabled: true
+    publicHost: localhost
+    publicScheme: http
+    publicContext:
+    searchTemplate: "http://localhost:4200/#/search?s=%s"
+    # every minute
+    generationCron: 0 * * * * *
+    generationPath: ./sitemap

@@ -2,14 +2,14 @@ package de.washeuteessen.management.importjob.mongo;
 
 import de.washeuteessen.management.importjob.Job;
 import de.washeuteessen.management.importjob.metrics.ImportMetrics;
-import de.washeuteessen.management.importjob.mongo.repository.RecipeMongoSource;
 import de.washeuteessen.management.recipe.Recipe;
 import de.washeuteessen.management.recipe.RecipeRepository;
-import io.reactivex.Observable;
+import de.washeuteessen.management.source.RecipeMongoSource;
+import de.washeuteessen.management.source.RecipeMongoSourceRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -20,7 +20,7 @@ public class MongoJob extends Job {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoJob.class);
 
-    private MongoOperations repository;
+    private RecipeMongoSourceRepository repository;
 
     @Override
     public void runAndSaveTo(final RecipeRepository recipeRepository, final ImportMetrics importMetrics) {
@@ -29,7 +29,7 @@ public class MongoJob extends Job {
         query.addCriteria(Criteria.where("imported").exists(false));
         query.limit(100);
 
-        Observable.fromIterable(this.repository.find(query, RecipeMongoSource.class))
+        this.repository.findNewToImport(PageRequest.of(0, 100))
                 .map(this::markAsImported)
                 .filter(RecipeMongoSource::isValid)
                 .map(RecipeMongoSource::toRecipe)
