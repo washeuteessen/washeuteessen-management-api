@@ -34,7 +34,7 @@ public class RecipeMongoSource {
     public boolean isValid() {
         if (null == title) {
             return false;
-        } else if (null == img_src) {
+        } else if (null == domain) {
             return false;
         } else if (null == url) {
             return false;
@@ -42,4 +42,7 @@ public class RecipeMongoSource {
         return true;
     }
 
+    public boolean hasImage() {
+        return this.img_src != null && !this.img_src.equals("");
+    }
 }

@@ -9,12 +9,14 @@ import de.washeuteessen.management.importjob.DuplicationFilter;
 import de.washeuteessen.management.importjob.Job;
 import de.washeuteessen.management.importjob.file.model.RecipeJsonNode;
 import de.washeuteessen.management.importjob.metrics.ImportMetrics;
+import de.washeuteessen.management.recipe.Recipe;
 import de.washeuteessen.management.recipe.RecipeRepository;
 import io.reactivex.Emitter;
 import io.reactivex.Flowable;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,7 +49,8 @@ public class FileJob extends Job {
 
             final DuplicationFilter duplicationFilter = new DuplicationFilter(recipeRepository, importMetrics);
             flowable.map(RecipeJsonNode::toRecipe)
-                    //.buffer(1, TimeUnit.SECONDS)
+                    .filter(this::isValid)
+                    .filter(this::hasImage)
                     .map(duplicationFilter::updateExisting)
                     .subscribe(
                             recipeRepository::save,
@@ -65,6 +68,23 @@ public class FileJob extends Job {
         } else {
             emitter.onComplete();
         }
+    }
+
+
+    private boolean isValid(Recipe recipe) {
+        if (StringUtils.isEmpty(recipe.getUrl())) {
+            return false;
+        } else if (StringUtils.isEmpty(recipe.getSource())) {
+            return false;
+        } else if (StringUtils.isEmpty(recipe.getTitle())) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean hasImage(Recipe recipe) {
+        return !StringUtils.isEmpty(recipe.getImageSrc());
     }
 
 }

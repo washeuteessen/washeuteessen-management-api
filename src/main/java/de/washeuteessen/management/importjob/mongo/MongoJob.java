@@ -32,6 +32,7 @@ public class MongoJob extends Job {
         this.repository.findNewToImport(PageRequest.of(0, 100))
                 .map(this::markAsImported)
                 .filter(RecipeMongoSource::isValid)
+                .filter(RecipeMongoSource::hasImage)
                 .map(RecipeMongoSource::toRecipe)
                 .subscribe(
                         recipe -> {
