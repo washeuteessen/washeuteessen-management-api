@@ -29,6 +29,8 @@ public class MongoJob extends Job {
         query.addCriteria(Criteria.where("imported").exists(false));
         query.limit(100);
 
+        LOGGER.info("starting mongo import ...");
+
         this.repository.findNewToImport(PageRequest.of(0, 100))
                 .map(this::markAsImported)
                 .filter(RecipeMongoSource::isValid)

@@ -33,6 +33,8 @@ public class FileJob extends Job {
     public void runAndSaveTo(final RecipeRepository recipeRepository, final ImportMetrics importMetrics) {
         try {
 
+            LOGGER.info("starting file import ...");
+
             final JsonFactory f = new MappingJsonFactory();
             final JsonParser jp = f.createParser(new FileInputStream(this.file));
 
